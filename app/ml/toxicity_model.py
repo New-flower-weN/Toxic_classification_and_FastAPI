@@ -30,17 +30,13 @@ class ToxicityModel:
         text = re.sub(r'[^\w\s]', '', text).lower()
         text = re.sub(r'\s+', ' ', text).strip()
 
-        # Получаем предсказание
         try:
-            # Для бинарной классификации
             if hasattr(self.model, 'predict_proba'):
                 probability = self.model.predict_proba([text])[0]
-                # Предполагаем, что класс 1 — это токсичный
                 toxicity_score = float(probability[1])
                 is_toxic = toxicity_score > 0.8
                 confidence = max(probability)
             else:
-                # Если только predict
                 prediction = self.model.predict([text])[0]
                 is_toxic = bool(prediction)
                 toxicity_score = 1.0 if is_toxic else 0.0

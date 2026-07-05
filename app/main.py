@@ -10,7 +10,7 @@ app = FastAPI()
 def func():
     return {'message': 'hello, world'}
 
-app.include_router(post.router) # when we get http request -> include everything from post.router
+app.include_router(post.router) 
 app.include_router(comment.router)
 app.include_router(user.router)
 app.include_router(auth.router)

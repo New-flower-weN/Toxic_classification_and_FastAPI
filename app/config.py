@@ -14,4 +14,4 @@ class Settings(BaseSettings):
     class Config:
         env_file=".env"
 
-settings = Settings() # pydantics looks through all env variables; doesnt care about capitalizaion of the letters
+settings = Settings() 

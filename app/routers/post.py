@@ -20,31 +20,6 @@ def get_posts(db: Session = Depends(get_db), current_user: int = Depends(oauth2.
     
     return posts
 
-# options() в SQLAlchemy — это метод, который позволяет настроить способ загрузки связанных данных в одном запросе. 
-# Он решает проблему N+1 запросов.
-# Что делает options(selectinload(...))?
-# Без options:
-# python
-# posts = db.query(models.Post).all()
-# for post in posts:
-#     comments = post.comments  # Здесь выполняется ДОПОЛНИТЕЛЬНЫЙ запрос к БД!
-# Это создает N+1 запросов:
-# 1 запрос для получения всех постов
-# N запросов для получения комментариев к каждому посту
-# С options(selectinload(...)):
-# python
-# posts = db.query(models.Post).options(
-#     selectinload(models.Post.comments)
-# ).all()
-# Выполняется всего 2 запроса:
-# SELECT * FROM posts
-# SELECT * FROM comments WHERE post_id IN (1, 2, 3, ...) — одним запросом для всех постов
-# options()	Метод для применения стратегий	query.options(...)
-# selectinload()	Стратегия загрузки (IN-запрос)	selectinload(Model.relation)
-# joinedload()	Стратегия загрузки (JOIN)	joinedload(Model.relation)
-# subqueryload()	Стратегия загрузки (подзапрос)	subqueryload(Model.relation)
-
-# @router.get("/{id}", response_model=schemas.PostResponse) # {id} -> just some variable FastAPI cant tell differenc between this & "/posts/latest" -> order matter
 @router.get("/{id}", status_code=status.HTTP_200_OK, response_model=schemas.PostOut)
 def get_post(id: int, db: Session=Depends(get_db), current_user: int = Depends(oauth2.get_current_user)): 
 
